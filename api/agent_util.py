@@ -7,6 +7,7 @@ from google.adk.runners import Runner
 from google.genai.types import Content, Part
 
 from summarize_agent.agent import root_agent
+import uuid
 
 import warnings
 # Ignore all warnings
@@ -20,7 +21,13 @@ APP_NAME = "summarize-agent"
 
 session_service = InMemorySessionService()
 
-async def main(user_id: str, session_id: str, url: str):
+async def main(url: str, user_id: str=None, session_id: str=None):
+    if not user_id:
+        user_id = str(uuid.uuid8())
+    
+    if not session_id:
+        session_id = str(uuid.uuid8())
+
     session = await session_service.get_session(
         app_name=APP_NAME, user_id=user_id, session_id=session_id
     )
@@ -47,7 +54,9 @@ async def main(user_id: str, session_id: str, url: str):
         if event.is_final_response() and event.content and event.content.parts:
             final_response_content = ''.join(part.text for part in event.content.parts)
 
-
+    session_service.delete_session(
+        app_name=APP_NAME, user_id=user_id, session_id=session_id
+    )
     return final_response_content
 
 if __name__ == "__main__":
@@ -55,9 +64,6 @@ if __name__ == "__main__":
     import asyncio
     result = asyncio.run(
         main(
-            user_id="random", 
-            session_id="random", 
-            # url = "https://www.mongodb.com/company/blog/engineering/to-lock-or-not-mongodbs-lock-free-b-tree-unlocks-throughput"
             url = "https://blog.stackademic.com/how-to-implement-cache-in-your-golang-api-cea87a260e21"
     ))
     print(result)
