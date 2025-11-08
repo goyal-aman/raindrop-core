@@ -1,0 +1,18 @@
+# Ignore all .env files (anywhere in the project)
+**/.env
+
+# Ignore Python cache files and directories
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore virtual environment folders (optional but recommended)
+.env/          # if you have a venv folder named .env
+venv/
+env/
+.venv/
+
+# Ignore build artifacts
+build/
+dist/
+*.egg-info/
