@@ -70,34 +70,41 @@ Endpoints and examples
 
 Request
 
+```
 curl -X POST "http://localhost:8000/ingest" \
   -H "Content-Type: application/json" \
   -d '{"url":"https://example.com/article"}'
+```
 
 Response (HTTP 202)
-
+```
 {
   "status": "accepted",
   "url": "https://example.com/article"
 }
+```
 
 2) Check status / fetch generated summary
 
 Request
-
+```
 curl -s "http://localhost:8000/ingest?url=https://example.com/article"
-
+```
 Possible responses
 - 200 OK (when job exists):
+  ```
   {
     "status": "WIP" | "DONE",
     "url": "https://example.com/article",
     "content": null | "The AI-generated summary text..."
   }
+  ```
 - 404 Not Found (when URL not present):
+  ```
   {
     "detail": "URL not found"
   }
+  ```
 
 Notes about URLs
 ----------------
